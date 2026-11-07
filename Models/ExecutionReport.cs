@@ -58,3 +58,4 @@ namespace Task2_AiTestRunner.Models
         public List<StepExecutionResult> Steps { get; set; } = new List<StepExecutionResult>();
     }
 }
+

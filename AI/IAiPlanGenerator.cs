@@ -8,3 +8,4 @@ namespace Task2_AiTestRunner.AI
         Task<string> GenerateJsonPlanAsync(string testCase, string targetUrl);
     }
 }
+
