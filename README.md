@@ -101,6 +101,26 @@ Task2-AiTestRunner/
 └── README.md
 ```
 
+## Approach & Why This Architecture?
+
+1. **Decoupled 2-Stage Pipeline (AI Plan Synthesis -> Deterministic Browser Engine)**:
+   - Rather than letting an AI agent hallucinate raw selenium/playwright code or click arbitrary coordinates, the AI's sole responsibility is translating natural language intent into a typed, validated JSON action plan.
+   - The browser automation engine is 100% deterministic, measurable, and repeatable.
+2. **Pre-flight Schema Validation**:
+   - The schema validator catches nonsensical, malformed, or missing arguments before launching a browser session, preventing wasted test execution time.
+3. **Dual AI Strategy (Zero-Barrier Offline Fallback + Real LLM Power)**:
+   - When an API key (e.g., OpenAI/Gemini) is provided, the tool leverages deep reasoning to interpret complex phrasing.
+   - When running offline, without credits, or in CI environments, the built-in deterministic semantic NLP synthesizer ensures 100% test suite reliability without external dependencies.
+
+## Limitations
+
+1. **Complex Multi-factor Authentication / Captchas**:
+   - Like most automated testing tools, the runner cannot bypass bot-detection challenges (Cloudflare, CAPTCHAs) or OTP/MFA gates without dedicated mocking or authentication token injection.
+2. **Ambiguous Natural Language**:
+   - If a plain-English test case is too vague (e.g. *"Check if everything looks great"*), the synthesizer cannot definitively determine what element or value constitutes a successful assertion unless explicitly clarified.
+3. **Complex Dynamic SPAs with Canvas / WebGL**:
+   - The engine relies on DOM accessibility trees, visible text, ARIA roles, and standard HTML form controls. Highly canvas-based applications (such as WebGL graphs or custom virtualized grids) require visual regression or coordinate-based interactions.
+
 ---
 
 ## Setup & Prerequisites
@@ -227,3 +247,4 @@ Execution Time : 3868 ms
 Report File    : test-report.json
 ==========================================================
 ```
+
